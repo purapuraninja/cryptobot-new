@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "trading-bot": {
+      "command": "python",
+      "args": ["mcp_server.py"],
+      "cwd": "C:/Users/kejar/Trading Bot - switch",
+      "env": {
+        "PYTHONPATH": "C:/Users/kejar/Trading Bot - switch"
+      }
+    }
+  }
+}

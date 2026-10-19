@@ -1,0 +1,71 @@
+# Secrets and environment files
+.env
+.env.*
+*.env
+*.env.*
+env.example
+!env.example
+env.sample
+.env.sample
+- Copy.env
+
+# Private keys and credentials
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*secret*
+*token*
+*credential*
+*credentials*
+*private*
+*apikey*
+*api_key*
+
+# Runtime trading data and local history
+logs/
+pnl_store*.json
+trade_memory*.json
+claudecode history/
+.claude/
+
+# SQLite storage backend (runtime data + WAL sidecars)
+data/trading_bot.db
+trading_bot.db
+*.db-wal
+*.db-shm
+
+# Local backup archive
+cryptobot.zip
+
+# Python/cache artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Generated reports and local notes
+bot_performance.html
+dashboard.html
+CHAT_NOTES_*.md
+bug.txt
+
+# Archived backups / superseded files (kept locally, not tracked)
+archive/
+decision_audit.jsonl
+logs/decision_audit.jsonl
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

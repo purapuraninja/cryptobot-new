@@ -1,0 +1,93 @@
+Flow sekarang kira-kira begini:
+1. Bot refresh symbol universe
+   Config.SYMBOLS / AUTO_SYMBOLS / open positions
+
+2. Bot fetch market data futures
+   data/market_feed.py
+   - OHLCV
+   - EMA/RSI/ATR
+   - funding
+   - OI
+   - spread
+   - wick warning
+   - SMC fields
+   - multi-timeframe context
+
+3. Bot sync/check posisi terbuka
+   - SL/TP
+   - trailing
+   - partial TP
+   - quick exit
+   - DCA prompt
+   - Telegram commands
+
+4. Bot hitung slot dan regime gate awal
+   main.py
+   - circuit breaker
+   - global regime quality
+   - kalau regime buruk, AI scan bisa diskip total
+
+5. Kalau AI scan tetap jalan:
+   bot generate learning context
+   trade_memory / adaptive params
+
+6. Bot fetch OnChainFeed
+   main.py sekitar blok:
+   onchain.fetch(trading_mode=Config.TRADING_MODE, symbols=_sm_syms)
+
+   Di dalam OnChainFeed:
+   - Fear & Greed
+   - Binance top trader L/S
+   - Binance taker ratio
+   - liquidation context
+   - smart_money_flows multi-symbol
+   - OKX Web3 enrichment
+
+7. OKX Web3 enrichment terjadi di dalam OnChainFeed.fetch()
+   data/onchain_feed.py
+
+   Logic-nya:
+   - Ambil symbols yang dikirim dari main
+   - Cocokkan symbol dengan OKX_WEB3_TOKEN_MAP
+   - Kalau OKX_WEB3_AUTO_RESOLVE=true, coba resolve contract otomatis
+   - Panggil OKX Web3:
+     - risk flags
+     - advanced token info
+     - cluster list
+     - price/liquidity/holders
+   - Return data ke result["okx_web3"]
+
+8. OnChainFeed.format_for_prompt()
+   Mengubah semua data regime + whale + OKX Web3 jadi text prompt.
+
+9. SignalEngine.analyze(...)
+   main.py kirim:
+   - market_data futures
+   - learning_context
+   - adaptive_params
+   - onchain_context
+
+   Jadi AI menerima:
+   - futures chart/data per symbol
+   - memory/performance context
+   - Binance/regime/whale context
+   - OKX Web3 enrichment context
+
+10. AI balas signal:
+    LONG / SHORT / HOLD
+
+11. Setelah AI, signal melewati deterministic filters
+    - blacklist
+    - data-only
+    - spread/wick/funding/wash filters
+    - SMC retest filter
+    - score/confidence floor
+    - TP direction validation
+    - R/R validation
+    - anti-overtrading
+    - adaptive SL/leverage
+    - decision audit/risk cap
+
+12. Kalau lolos semua:
+    executor.execute_signal()
+    Tetap Bybit Futures
